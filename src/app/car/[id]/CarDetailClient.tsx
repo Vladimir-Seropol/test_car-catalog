@@ -50,7 +50,7 @@ export default function CarDetailClient({ car }: { car: CarData }) {
       )}
 
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold">
+        <h1>
           {car.mark_cyrillic_name} {car.model_name}
         </h1>
         <p className="text-lg text-gray-600">{car.modification_id}</p>
