@@ -1,5 +1,4 @@
-// CarCard.tsx
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Car } from "@/app/types/car";
@@ -9,19 +8,26 @@ const CarCard = ({ car }: { car: Car }) => {
   const images = car.images.image;
   const totalImages = images.length;
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
-  };
+  }, [totalImages]);
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-md bg-white transition-transform hover:scale-[1.01] relative">
-      <div onClick={nextImage} className="relative cursor-pointer">
+      <div
+        onClick={(e) => {
+          e.preventDefault();
+          nextImage();
+        }}
+        className="relative cursor-pointer"
+      >
         <Image
           src={images[currentImageIndex]}
           alt={`${car.mark_id} ${car.folder_id}`}
           width={600}
           height={400}
           className="w-full h-48 object-cover transition-opacity duration-300"
+          priority={currentImageIndex === 0}
         />
 
         {totalImages > 1 && (
@@ -45,28 +51,61 @@ const CarCard = ({ car }: { car: Car }) => {
           href={`/car/${car.unique_id}`}
           target="_blank"
           rel="noopener noreferrer"
+          className="text-lg font-semibold hover:underline cursor-pointer"
         >
-          <h3 className="text-lg font-semibold hover:underline cursor-pointer">
-            {car.mark_cyrillic_name} {car.model_name} • {car.body_type}
-          </h3>
+          {car.mark_cyrillic_name} {car.model_name} • {car.body_type}
         </Link>
 
-        <p className="text-sm text-gray-600">
-            <img src="/icon3.svg" alt="" className="inline mr-1 w-4 h-4" />
-          {car.modification_id} • {car.complectation_name}
-        </p>
-        <p className="text-sm text-gray-600">
-          <img src="/icon1.svg" alt="" className="inline mr-1 w-4 h-4" />{" "}
-          {car.year} год 
-          <p className="text-sm text-gray-600">
-            <img src="/icon2.svg" alt="" className="inline mr-1 w-4 h-4" />
-            {car.run} тыс. км 
-          </p>
-        </p>
-        <p className="text-lg font-bold mt-2 flex items-center">
-            <img src="/icon4.svg" alt="" className="inline mr-1 w-4 h-4" />
-          {car.price.toLocaleString("ru-RU")} ₽
-        </p>
+        <div className="space-y-1">
+  
+  <div className="flex items-center text-sm text-gray-600">
+    <Image
+      src="/icon3.svg"
+      alt="Модификация"
+      width={16}
+      height={16}
+      className="mr-1"
+    />
+    <span>
+      {car.modification_id} • {car.complectation_name}
+    </span>
+  </div>
+
+  
+  <div className="flex items-center text-sm text-gray-600">
+    <Image
+      src="/icon1.svg"
+      alt="Год выпуска"
+      width={16}
+      height={16}
+      className="mr-1"
+    />
+    <span>{car.year} год</span>
+  </div>
+
+  
+  <div className="flex items-center text-sm text-gray-600">
+    <Image
+      src="/icon2.svg"
+      alt="Пробег"
+      width={16}
+      height={16}
+      className="mr-1"
+    />
+    <span>{car.run} тыс. км</span>
+  </div>
+</div>
+
+        <div className="text-lg font-bold mt-2 flex items-center">
+          <Image
+            src="/icon4.svg"
+            alt=""
+            width={16}
+            height={16}
+            className="inline mr-1"
+          />
+          <span>{car.price.toLocaleString("ru-RU")} ₽</span>
+        </div>
       </div>
     </div>
   );

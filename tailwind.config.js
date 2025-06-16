@@ -1,10 +1,13 @@
 module.exports = {
-  content: [
-    './src/**/*.{html,js,ts,jsx,tsx}', // Проверьте правильность путей
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)"],
+        mono: ["var(--font-geist-mono)"],
+      },
+    },
   },
   plugins: [],
-}
+};
 

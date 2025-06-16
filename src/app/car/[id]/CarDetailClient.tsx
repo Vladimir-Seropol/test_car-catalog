@@ -5,7 +5,6 @@ import Image from "next/image";
 import { CarData } from "@/app/types/car";
 import Loading from "../../loading";
 
-
 function DetailItem({ label, value }: { label: string; value: string | number }) {
   return (
     <p>
@@ -20,13 +19,16 @@ export default function CarDetailClient({ car }: { car: CarData }) {
   const [loadedImages, setLoadedImages] = useState<boolean[]>(
     new Array(car.images.image.length).fill(false)
   );
+  const [isModalImageLoading, setIsModalImageLoading] = useState(false);
 
   const handleImageClick = useCallback((img: string) => {
+    setIsModalImageLoading(true);
     setSelectedImage(img);
   }, []);
 
   const handleCloseModal = useCallback(() => {
     setSelectedImage(null);
+    setIsModalImageLoading(false);
   }, []);
 
   const handleImageLoad = useCallback((index: number) => {
@@ -35,6 +37,10 @@ export default function CarDetailClient({ car }: { car: CarData }) {
       updated[index] = true;
       return updated;
     });
+  }, []);
+
+  const handleModalImageLoad = useCallback(() => {
+    setIsModalImageLoading(false);
   }, []);
 
   const allImagesLoaded = loadedImages.every(Boolean);
@@ -117,30 +123,37 @@ export default function CarDetailClient({ car }: { car: CarData }) {
         </div>
       </section>
 
-      {selectedImage && (
-  <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-    <div className="relative max-w-5xl w-full max-h-[90vh]">
-      <button
-        onClick={handleCloseModal}
-        className="absolute -top-12 right-0 p-2 text-white hover:text-gray-300 transition-colors z-10"
-        aria-label="Закрыть"
-      >
-        <span className="text-3xl">×</span>
-      </button>
-      <div className="relative w-full h-full flex items-center justify-center">
-        <Image
-          src={selectedImage}
-          alt="Увеличенное изображение автомобиля"
-          width={1200}
-          height={800}
-          className="object-contain max-w-full max-h-full"
-          quality={100}
-          priority
-        />
-      </div>
-    </div>
-  </div>
-)}
+    {selectedImage && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-5xl w-full max-h-[90vh]">
+            <button
+              onClick={handleCloseModal}
+              className="absolute -top-12 right-0 p-2 text-white hover:text-gray-300 transition-colors z-10"
+              aria-label="Закрыть"
+            >
+              <span className="text-3xl">×</span>
+            </button>
+            <div className="relative w-full h-full flex items-center justify-center">
+              {isModalImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loading />
+                </div>
+              )}
+              <Image
+                src={selectedImage}
+                alt="Увеличенное изображение автомобиля"
+                width={1200}
+                height={800}
+                className={`object-contain max-w-full max-h-full ${isModalImageLoading ? 'opacity-0' : 'opacity-100'}`}
+                quality={100}
+                priority
+                onLoadingComplete={handleModalImageLoad}
+                onLoad={handleModalImageLoad} 
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
