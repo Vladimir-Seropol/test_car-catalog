@@ -47,17 +47,24 @@ const CarCard = ({ car }: { car: Car }) => {
           rel="noopener noreferrer"
         >
           <h3 className="text-lg font-semibold hover:underline cursor-pointer">
-            {car.mark_cyrillic_name} {car.model_name}
+            {car.mark_cyrillic_name} {car.model_name} • {car.body_type}
           </h3>
         </Link>
 
         <p className="text-sm text-gray-600">
+            <img src="/icon3.svg" alt="" className="inline mr-1 w-4 h-4" />
           {car.modification_id} • {car.complectation_name}
         </p>
         <p className="text-sm text-gray-600">
-          {car.year} • {car.run} тыс. км • {car.body_type}
+          <img src="/icon1.svg" alt="" className="inline mr-1 w-4 h-4" />{" "}
+          {car.year} год 
+          <p className="text-sm text-gray-600">
+            <img src="/icon2.svg" alt="" className="inline mr-1 w-4 h-4" />
+            {car.run} тыс. км 
+          </p>
         </p>
         <p className="text-lg font-bold mt-2">
+            <img src="/icon4.svg" alt="" className="inline mr-1 w-4 h-4" />
           {car.price.toLocaleString("ru-RU")} ₽
         </p>
       </div>
