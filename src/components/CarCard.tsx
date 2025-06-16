@@ -63,7 +63,7 @@ const CarCard = ({ car }: { car: Car }) => {
             {car.run} тыс. км 
           </p>
         </p>
-        <p className="text-lg font-bold mt-2">
+        <p className="text-lg font-bold mt-2 flex items-center">
             <img src="/icon4.svg" alt="" className="inline mr-1 w-4 h-4" />
           {car.price.toLocaleString("ru-RU")} ₽
         </p>
